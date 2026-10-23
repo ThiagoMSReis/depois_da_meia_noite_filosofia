@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Depois da Meia-Noite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/jogo.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+
+<body>
+  <div id="sky"></div>
+  <div class="px" data-d="7">
+    <div id="moon"></div>
+  </div>
+  <div class="px" data-d="12"><svg class="city" id="far" viewBox="0 0 1440 300"
+      preserveAspectRatio="xMidYMax slice"></svg></div>
+  <div class="fx" style="overflow:hidden" aria-hidden="true">
+    <svg class="bat" style="top:14%" viewBox="0 0 32 16">
+      <path
+        d="M16 8C13 2 7 0 0 2c4 1 6 4 6 8 2-2 5-2 6 0 1-2 4-2 4 0 0-2 3-2 4 0 1-2 4-2 6 0 0-4 2-7 6-8-7-2-13 0-16 6z" />
+    </svg>
+    <svg class="bat" style="top:30%;width:22px;animation-duration:30s;animation-delay:-11s" viewBox="0 0 32 16">
+      <path
+        d="M16 8C13 2 7 0 0 2c4 1 6 4 6 8 2-2 5-2 6 0 1-2 4-2 4 0 0-2 3-2 4 0 1-2 4-2 6 0 0-4 2-7 6-8-7-2-13 0-16 6z" />
+    </svg>
+    <svg class="bat" style="top:8%;width:26px;animation-duration:38s;animation-delay:-24s" viewBox="0 0 32 16">
+      <path
+        d="M16 8C13 2 7 0 0 2c4 1 6 4 6 8 2-2 5-2 6 0 1-2 4-2 4 0 0-2 3-2 4 0 1-2 4-2 6 0 0-4 2-7 6-8-7-2-13 0-16 6z" />
+    </svg>
+  </div>
+  <div class="fog f1"></div>
+  <div class="px" data-d="24"><svg class="city" id="near" viewBox="0 0 1440 260"
+      preserveAspectRatio="xMidYMax slice"></svg></div>
+  <div class="fog f2"></div>
+  <div class="px" data-d="34" aria-hidden="true">
+    <div id="ledge"></div>
+    <svg id="cat" viewBox="0 0 120 150">
+      <g fill="#06030c" stroke="#06030c">
+        <path class="tail" d="M78 138c30 2 40-20 30-40-4-8-2-14 4-16" fill="none" stroke-width="9"
+          stroke-linecap="round" />
+        <ellipse cx="55" cy="112" rx="30" ry="34" />
+        <circle cx="55" cy="58" r="24" />
+        <path d="M33 48 30 22 50 38zM77 48 80 22 60 38z" />
+      </g>
+      <path d="M36 77q19 12 38 0" stroke="#8b1e3f" stroke-width="5" fill="none" />
+      <circle cx="55" cy="87" r="3.5" fill="#d9d9ea" />
+      <g class="eyes">
+        <ellipse cx="45" cy="56" rx="5" ry="6.5" fill="#39ff14" />
+        <ellipse cx="65" cy="56" rx="5" ry="6.5" fill="#39ff14" />
+        <rect x="44" y="51" width="2" height="10" rx="1" fill="#06030c" />
+        <rect x="64" y="51" width="2" height="10" rx="1" fill="#06030c" />
+      </g>
+    </svg>
+  </div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div id="vig"></div>
+
+  <main id="ui">
+    <h1 aria-label="Depois da Meia-Noite"><span class="l1" id="l1"></span><span class="l2" id="l2"></span></h1>
+    <div class="orn rise" style="--d:2.2s"><i></i><svg viewBox="0 0 24 24">
+        <path d="M20 14.5A9 9 0 0 1 9.5 4 9 9 0 1 0 20 14.5z" />
+      </svg><i></i></div>
+    <p class="tag rise" style="--d:2.6s">Nem todas as respostas aparecem de uma vez.</p>
+    <nav class="rise" style="--d:3.1s">
+      <button class="btn main" id="play">Começar a noite</button>
+      <button class="btn" data-open="how">Como jogar</button>
+      <button class="btn" data-open="cred">Créditos</button>
+    </nav>
+    <div class="foot rise" style="--d:3.6s">Santa Bruma, 00<b>:</b>00</div>
+  </main>
+
+  <div id="modal" role="dialog" aria-modal="true">
+    <div class="card">
+      <section id="how">
+        <h2>Como jogar</h2>
+        <p>Você é Victor. Leia cada cena e escolha o que fazer. Amora, a gata, não decide por você: ela faz perguntas.
+        </p>
+        <div class="m"><span>Reserva</span><b><i style="--v:60%;--c:#e11d38"></i></b><em>60</em></div>
+        <div class="m"><span>Remorso</span><b><i style="--v:15%;--c:#8b3dff"></i></b><em>15</em></div>
+        <div class="m"><span>Helena</span><b><i style="--v:0%;--c:#7fb2ff"></i></b><em>0</em></div>
+        <p class="small">Reserva é o controle da fome: perto de 0, Victor perde o controle. Remorso cresce quando ele
+          age contra seus valores ou esconde algo. A proximidade com Helena cresce com conversas honestas.</p>
+        <p class="small">Cada escolha altera as barras uma única vez. Existem três finais.</p>
+      </section>
+      <section id="cred">
+        <h2>Créditos</h2>
+        <p>Depois da Meia-Noite, jogo narrativo.</p>
+        <p>Roteiro:<i>Ana Júlia Marques Oliveira</i><i>Isadora Ferreira Oliveira</i></p>
+        <p>Arte dos personagens:<i>Ângela Silva Oliveira</i></p>
+        <p>Programação:<i>Ana Izaura Lopes Coqueiro</i><i>Ana Izaura Lopes Coqueiro</i><i>Beatriz Santos
+            Silva</i><i>Beverly Ramona Barbosa Santos</i><i>Thaisa Aparecida Alves
+            Ribeiro</i><i>Thiago Moura Silva Reis</i></p>
+        <p class="small">Inspirado nas ideias de Pierre Lévy sobre labirinto, escolha e ideografia dinâmica.</p>
+      </section>
+      <button class="btn" id="close">Voltar</button>
+    </div>
+  </div>
+
+  <div id="fade">
+    <div class="t t1">22h30</div>
+    <div class="t t2">Casa de Victor</div>
+    <div class="t t3">Cena 1: Um segredo à meia-noite</div>
+    <div class="s">
+      <p class="t3">A Cena 1 entra aqui no próximo passo.</p><button class="btn" id="back">Voltar ao início</button>
+    </div>
+  </div>
+
+  <!-- ===== TELA DO JOGO: os elementos abaixo são preenchidos pelo js/motor.js ===== -->
+  <div id="game">
+    <div id="bg"></div> <!-- cenário -->
+    <div id="hud"></div> <!-- barras: Reserva, Remorso, Helena -->
+    <div id="lugar"></div> <!-- hora e local (canto superior direito) -->
+    <div id="palco" aria-hidden="true"></div> <!-- personagens (PNG) -->
+    <div id="aura" aria-hidden="true"><i class="ar"></i><i class="ap"></i></div>
+    <!-- auras: vermelha (fome) e roxa (remorso) -->
+    <div id="final"> <!-- tela de final (js/motor.js: telaFinal) -->
+      <p id="fn" class="rise" style="--d:.4s"></p>
+      <h2 id="ft"></h2>
+      <p id="fs" class="rise" style="--d:2.8s"></p>
+      <div class="orn rise" style="--d:3.1s"><i></i><svg viewBox="0 0 24 24">
+          <path d="M20 14.5A9 9 0 0 1 9.5 4 9 9 0 1 0 20 14.5z" />
+        </svg><i></i></div>
+      <p id="fq" class="rise" style="--d:3.8s"></p>
+      <button class="btn rise" id="fr" type="button" style="--d:6s">Jogar novamente</button>
+    </div>
+    <button id="som" type="button">Som: ligado</button>
+    <div id="cx" tabindex="-1"> <!-- caixa de diálogo -->
+      <div id="nm"></div>
+      <p id="tx" aria-live="polite"></p>
+      <div id="op"></div><span id="nx" aria-hidden="true">▾</span>
+    </div>
+  </div>
+
+  <!-- ORDEM IMPORTA: início → dados (config, personagens, cenários, cenas, sons) → áudio → motor -->
+  <script src="js/inicio.js"></script>
+  <script src="js/dados/config.js"></script>
+  <script src="js/dados/personagens.js"></script>
+  <script src="js/dados/cenarios.js"></script>
+  <script src="js/dados/cenas.js"></script>
+  <script src="js/dados/sons.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/motor.js"></script>
+</body>
+
+</html>

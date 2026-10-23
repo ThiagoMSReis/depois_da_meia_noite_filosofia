@@ -1,0 +1,434 @@
+/* ===== TELA DO JOGO (cenário, personagens, barras, caixa de diálogo) ===== */
+#game {
+  --chao: clamp(120px, 22vh, 200px);
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  display: none;
+  background: var(--night);
+}  /* --chao: altura (a partir de baixo) onde os personagens pisam */
+#game.on {
+  display: block;
+}
+
+/* CENÁRIO: a imagem (PNG) e a cor de reserva são colocadas pelo motor.js */
+#bg {
+  position: absolute;
+  inset: 0;
+  transition: opacity .5s;
+  background: center bottom/cover no-repeat;
+}
+
+/* BARRAS (Reserva, Remorso, Helena) e LOCAL/HORA */
+#hud {
+  position: absolute;
+  z-index: 3;
+  top: calc(env(safe-area-inset-top, 0px) + .9rem);
+  left: 1rem;
+  width: min(270px, 54vw);
+  display: grid;
+  gap: .4rem;
+  text-shadow: 0 1px 8px #000;
+}
+
+.hb {
+  display: grid;
+  grid-template-columns: 4.4rem 1fr 3.4rem;
+  gap: .5rem;
+  align-items: center;
+  color: var(--dim);
+  font-size: 1.05rem;
+}
+
+.hb b {
+  height: 8px;
+  background: rgba(11, 6, 24, .85);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.hb i {
+  display: block;
+  height: 100%;
+  width: var(--v, 0);
+  background: var(--c);
+  transition: width 1s cubic-bezier(.2, .7, .2, 1);
+}
+
+.hb em {
+  font-style: normal;
+  text-align: right;
+  color: var(--ink);
+}
+
+.d {
+  font-size: .9rem;
+  color: var(--gold);
+  margin-right: .35rem;
+  opacity: 0;
+}
+
+.d.on {
+  animation: dl 3s forwards;
+}  /* aviso +5 / −5 */
+@keyframes dl {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#lugar {
+  position: absolute;
+  z-index: 3;
+  top: calc(env(safe-area-inset-top, 0px) + .8rem);
+  right: 1rem;
+  text-align: right;
+  text-shadow: 0 1px 8px #000;
+}
+
+#lugar b {
+  display: block;
+  font: 700 1.35rem 'Cinzel Decorative', Georgia, serif;
+  color: #ffe3b3;
+}
+
+#lugar span {
+  font-style: italic;
+  color: var(--dim);
+  font-size: 1.1rem;
+}
+
+/* PALCO: onde ficam os PNGs dos personagens (acima da caixa de diálogo) */
+#palco {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: var(--chao);
+  height: min(66vh, 620px);
+  pointer-events: none;
+}
+
+/* Cada personagem: posição (left/bottom) vem da cena; --alt = altura em % do palco (PERSONAGENS.altura) */
+.sp {
+  position: absolute;
+  height: min(calc(var(--alt, 100) * 1%), 70vw);
+  transform: translateX(-50%);
+  transition: opacity .6s, filter .5s;
+}
+
+.sp img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+.sp.off {
+  opacity: 0;
+}  /* fora de cena */
+.sp.dim {
+  filter: brightness(.5);
+}  /* presente, mas quem fala é outro */
+
+/* Quadro tracejado: aparece no lugar do PNG enquanto a imagem não existe */
+.vazio {
+  height: 100%;
+  aspect-ratio: 3/4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: .6rem;
+  text-align: center;
+  border: 2px dashed rgba(242, 197, 124, .55);
+  border-radius: 50% 50% 0 0/35% 35% 0 0;
+  background: rgba(242, 197, 124, .08);
+  color: var(--gold);
+  font: 700 1rem 'Cinzel Decorative', Georgia, serif;
+}
+
+/* CAIXA DE DIÁLOGO: nome, texto, seta ▾ e botões de escolha */
+#cx {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  width: min(780px, calc(100% - 1.6rem));
+  min-height: 8.5rem;
+  padding: 1rem 1.5rem 1.3rem;
+  cursor: pointer;
+  outline: none;
+  background: linear-gradient(160deg, rgba(26, 15, 56, .94), rgba(11, 6, 24, .95));
+  border: 1px solid rgba(242, 197, 124, .4);
+  box-shadow: 0 0 60px rgba(120, 70, 220, .28);
+  backdrop-filter: blur(6px);
+}
+
+#nm {
+  min-height: 1.5em;
+  margin-bottom: .3rem;
+  font: 700 1.05rem 'Cinzel Decorative', Georgia, serif;
+  letter-spacing: .08em;
+  color: var(--gold);
+}
+
+#tx {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+  line-height: 1.5;
+}
+
+#tx.n {
+  font-style: italic;
+  color: #cfc6e6;
+}  /* texto do narrador */
+#nx {
+  position: absolute;
+  right: 1.1rem;
+  bottom: .6rem;
+  color: var(--gold);
+  animation: colon 1.2s steps(2) infinite;
+}
+
+#op {
+  display: grid;
+  gap: .6rem;
+  margin-top: .9rem;
+}
+
+#op:empty {
+  display: none;
+}
+
+#op .btn {
+  justify-self: center;
+}
+
+.opt {
+  padding: .8rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  font: 600 1.2rem/1.3 'Cormorant Garamond', Georgia, serif;
+  background: rgba(12, 7, 30, .6);
+  border: 1px solid rgba(242, 197, 124, .35);
+  transition: border-color .35s, box-shadow .35s;
+}
+
+.opt:hover,
+.opt:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 26px rgba(242, 197, 124, .32), inset 0 0 18px rgba(242, 197, 124, .12);
+}
+
+/* ===== AURAS (fome no limite = vermelha, remorso no limite = roxa) ===== */
+#aura {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#aura i {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+
+.ar {
+  box-shadow: inset 0 0 140px 50px rgba(220, 20, 40, .6);
+  animation: bate 1.1s infinite;
+}  /* pulsa como um coração */
+.ap {
+  box-shadow: inset 0 0 170px 60px rgba(130, 40, 220, .55);
+  animation: respira 3.4s ease-in-out infinite;
+}
+
+#game.fome .ar,
+#game.culpa .ap {
+  opacity: 1;
+}
+
+@keyframes bate {
+  0%,
+  100% {
+    filter: brightness(.7);
+  }
+  15% {
+    filter: brightness(1.6);
+  }
+  30% {
+    filter: brightness(.8);
+  }
+  45% {
+    filter: brightness(1.35);
+  }
+}
+
+@keyframes respira {
+  50% {
+    filter: brightness(1.5);
+  }
+}
+
+/* ===== Escurecimento (cenas de ataque) e texto de tela ===== */
+#game #bg {
+  transition: opacity .5s, filter 1.2s;
+}
+
+#palco {
+  transition: filter 1.2s;
+}
+
+#game.escuro #bg,
+#game.escuro #palco {
+  filter: brightness(.06);
+}
+
+#tx.q {
+  text-align: center;
+  color: var(--gold);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+}
+
+/* ===== Botão de som ===== */
+#som {
+  position: absolute;
+  z-index: 5;
+  right: 1rem;
+  top: calc(env(safe-area-inset-top, 0px) + 4.4rem);
+  cursor: pointer;
+  color: var(--dim);
+  font: 600 .95rem 'Cormorant Garamond', Georgia, serif;
+  background: rgba(11, 6, 24, .7);
+  border: 1px solid rgba(242, 197, 124, .3);
+  padding: .25rem .7rem;
+}
+
+#som:hover,
+#som:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+/* ===== TELA DE FINAL: ocupa o centro da tela (cor por tipo de final) ===== */
+#final {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 42%, rgba(var(--fb), .3), rgba(0, 0, 0, .97) 68%);
+}
+
+#final.on {
+  display: flex;
+  animation: fIn 2.2s ease forwards;
+}
+
+@keyframes fIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#final.f1 {
+  --fc: #ffe3b3;
+  --fb: 255, 179, 71;
+}  /* final 1: dourado */
+#final.f2 {
+  --fc: #dcc8ff;
+  --fb: 140, 80, 230;
+}  /* final 2: roxo (remorso) */
+#final.f3 {
+  --fc: #ff9fae;
+  --fb: 225, 30, 60;
+}  /* final 3: vermelho (fome) */
+#final::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 170px 50px rgba(var(--fb), .35);
+  animation: respira 4s ease-in-out infinite;
+}
+
+#final.f3::after {
+  animation: bate 1.1s infinite;
+}
+
+#fn {
+  margin: 0;
+  color: var(--dim);
+  font-size: 1.15rem;
+  letter-spacing: .35em;
+}
+
+#ft {
+  margin: 0;
+  font: 700 clamp(2.2rem, 8vw, 5.4rem)/1.1 'Cinzel Decorative', Georgia, serif;
+  color: var(--fc);
+  text-shadow: 0 0 20px rgba(var(--fb), .75), 0 0 70px rgba(var(--fb), .5);
+}
+
+#fs {
+  margin: 0;
+  font-style: italic;
+  color: var(--dim);
+  font-size: 1.3rem;
+}
+
+#fq {
+  margin: .2rem 0 0;
+  max-width: 32ch;
+  font-style: italic;
+  font-size: clamp(1.3rem, 3.2vw, 2rem);
+  line-height: 1.5;
+  color: #efe9fb;
+  text-shadow: 0 2px 14px #000;
+}
+
+#fr {
+  margin-top: 1.2rem;
+}
+
+#game #som {
+  z-index: 7;
+}
+
+/* ===== CHÃO ESCURO: cobre a base dos personagens para eles não parecerem flutuando ===== */
+#game::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--chao) + 13vh);
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, .97) 0%, rgba(0, 0, 0, .92) 50%, rgba(0, 0, 0, 0) 100%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 60%, transparent 100%);
+}
